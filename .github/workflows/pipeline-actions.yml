@@ -20,5 +20,5 @@ jobs:
       uses: docker/build-push-action@v5.0.0
       with:
         context: .
-        tags: 'lucasfm95/fiap-github-actions:latest'
+        tags: 'lucasfm95/fiap-tech-challenge-fase2:latest'
         push: true
