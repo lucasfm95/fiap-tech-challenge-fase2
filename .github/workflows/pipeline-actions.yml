@@ -22,3 +22,8 @@ jobs:
         context: .
         tags: 'lucasfm95/fiap-tech-challenge-fase2:latest'
         push: true
+        
+    - name: Send deploy render
+      uses: Tyrrrz/action-http-request@1.1.2
+      with:
+        url:  https://api.render.com/deploy/${{ secrets.DEPLOY_RENDER }}
