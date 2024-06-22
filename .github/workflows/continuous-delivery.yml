@@ -1,7 +1,10 @@
 name: Pipeline
 on:
-  push:
+  workflow_run:
+    workflows: ["CI build"]
     branches: [main]
+    types:
+      - completed
 jobs:
   docket_hub:
     name: Build and Publish
