@@ -2,12 +2,12 @@ name: CI Build And Test
 
 on:
   push:
-    branches: ["*"]
+    branches: ["main"]
   pull_request:
     branches: ["*"]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
