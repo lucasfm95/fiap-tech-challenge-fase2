@@ -1,13 +1,13 @@
-name: Pipeline
+name: CD Docker Hub
 on:
   workflow_run:
-    workflows: ["CI build"]
+    workflows: ["CI Build And Test"]
     branches: [main]
     types:
       - completed
 jobs:
-  docket_hub:
-    name: Build and Publish
+  docker_hub:
+    name: Build and Publish Image to Docker Hub
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository 
@@ -25,8 +25,3 @@ jobs:
         context: .
         tags: 'lucasfm95/fiap-tech-challenge-fase2:latest'
         push: true
-        
-    - name: Send deploy render
-      uses: Tyrrrz/action-http-request@1.1.2
-      with:
-        url:  https://api.render.com/deploy/${{ secrets.DEPLOY_RENDER }}
