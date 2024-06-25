@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddDbContext<ContactDbContext>(options =>
 {
     options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING_DB_POSTGRES"));
@@ -25,7 +24,7 @@ builder.Services.AddHealthChecks()
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
-
+var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
@@ -34,4 +33,22 @@ app.MapControllers();
 app.UseHealthcheck();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseSerilogRequestLogging();
+
+if (env == "IntegrationTests")
+{
+    await RunMigration();
+}
+
 app.Run();
+return;
+
+async Task RunMigration()
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ContactDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+public partial class Program
+{
+
+}
