@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiap.TechChallenge.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiap.TechChallenge.Infrastructure", "src\Fiap.TechChallenge.Infrastructure\Fiap.TechChallenge.Infrastructure.csproj", "{3BE94B3F-E994-493E-B048-C6C752C38DE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fiap.TechChallenge.IntegrationTests", "tests\Fiap.TechChallenge.IntegrationTests\Fiap.TechChallenge.IntegrationTests.csproj", "{E969DE3A-693A-4B90-B8D3-071CE179E47F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{3BE94B3F-E994-493E-B048-C6C752C38DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BE94B3F-E994-493E-B048-C6C752C38DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BE94B3F-E994-493E-B048-C6C752C38DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E969DE3A-693A-4B90-B8D3-071CE179E47F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E969DE3A-693A-4B90-B8D3-071CE179E47F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E969DE3A-693A-4B90-B8D3-071CE179E47F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E969DE3A-693A-4B90-B8D3-071CE179E47F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5DF057F3-D54A-4638-B9F9-DE3243C9E7E2} = {27EF4BC2-BAFB-41B4-93D9-292947D75D9F}
@@ -47,5 +53,6 @@ Global
 		{55EF4ADB-C198-4A3E-BFAB-10B73D80D68E} = {27EF4BC2-BAFB-41B4-93D9-292947D75D9F}
 		{120E0DA3-AC10-4FD8-A894-F32A508D85ED} = {27EF4BC2-BAFB-41B4-93D9-292947D75D9F}
 		{3BE94B3F-E994-493E-B048-C6C752C38DE0} = {27EF4BC2-BAFB-41B4-93D9-292947D75D9F}
+		{E969DE3A-693A-4B90-B8D3-071CE179E47F} = {C141D3A5-A157-417E-A14C-65D02AC78C94}
 	EndGlobalSection
 EndGlobal
