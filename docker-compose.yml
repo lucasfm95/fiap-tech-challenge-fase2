@@ -1,44 +1,45 @@
-version: '3.8'
+name: "fiap-tech-challenge"
 services:
-  api:
+  contacts-api:
+    container_name: contacts-api
     build:
       context: ./
       dockerfile: Dockerfile
       args:
         version: 1
-    image: fiap-tech-challenge-fase2-metrics
+    restart: always
     ports:
-      - 8888:80
+      - 8888:8080
     networks:
       - fiap-tech-challenge-fase2_network
+
   prometheus:
-    build:
-      context: ./prometheus
-      dockerfile: Dockerfile
-      args:
-        version: 1
-    image: prometheus-local
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+      - prometheus-storage:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: always
     ports:
       - 9090:9090
     networks:
       - fiap-tech-challenge-fase2_network
-    volumes:
-      - './prometheus/data:/data'
+  
   grafana:
-    build:
-      context: ./grafana
-      dockerfile: Dockerfile
-      args:
-        version: 1
-    image: grafana-local
+    container_name: grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/config/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
     restart: always
     ports:
       - 3000:3000
     networks:
       - fiap-tech-challenge-fase2_network
+      
   postgres:
-    image: postgres:15
+    image: postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
@@ -47,17 +48,16 @@ services:
     ports:
       - 5432:5432
     networks:
-      - postgres-db-network
+      - fiap-tech-challenge-fase2_network
 
 volumes:
   postgres-db-volume:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./data
+    external: false
+  grafana-storage:
+    external: false
+  prometheus-storage:
+    external: false
+  
 networks:
-  postgres-db-network:
-    driver: bridge
   fiap-tech-challenge-fase2_network:
     driver: bridge
