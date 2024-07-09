@@ -3,6 +3,7 @@ using Fiap.TechChallenge.Api.Configurations;
 using Fiap.TechChallenge.Api.Middlewares;
 using Fiap.TechChallenge.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,14 @@ builder.Services.AddHealthChecks()
                throw new Exception("CONNECTION_STRING_DB_POSTGRES not found."));
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
+var counter = Metrics.CreateCounter(
+    "fiap_tech_challenge_api_request_counter", "Contador de requisições HTTP", new CounterConfiguration
+{
+    LabelNames = ["method", "endpoint"]
+});
+
+
+
 var app = builder.Build();
 var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 app.UseSwagger();
@@ -33,6 +42,14 @@ app.MapControllers();
 app.UseHealthcheck();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseSerilogRequestLogging();
+
+app.Use((context, next) =>
+{
+    counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
+    return next();
+});
+app.UseMetricServer(settings => settings.EnableOpenMetrics = false);
+app.UseHttpMetrics();
 
 if (env == "IntegrationTests")
 {

@@ -1,5 +1,42 @@
 version: '3.8'
 services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        version: 1
+    image: fiap-tech-challenge-fase2-metrics
+    ports:
+      - 8888:80
+    networks:
+      - fiap-tech-challenge-fase2_network
+  prometheus:
+    build:
+      context: ./prometheus
+      dockerfile: Dockerfile
+      args:
+        version: 1
+    image: prometheus-local
+    restart: always
+    ports:
+      - 9090:9090
+    networks:
+      - fiap-tech-challenge-fase2_network
+    volumes:
+      - './prometheus/data:/data'
+  grafana:
+    build:
+      context: ./grafana
+      dockerfile: Dockerfile
+      args:
+        version: 1
+    image: grafana-local
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - fiap-tech-challenge-fase2_network
   postgres:
     image: postgres:15
     environment:
@@ -21,4 +58,6 @@ volumes:
       device: ./data
 networks:
   postgres-db-network:
+    driver: bridge
+  fiap-tech-challenge-fase2_network:
     driver: bridge
