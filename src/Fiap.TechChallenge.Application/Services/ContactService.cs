@@ -40,11 +40,11 @@ public class ContactService(IContactRepository contactRepository) : IContactServ
 
     public async Task<Contact> UpdateAsync(ContactPutRequest request, CancellationToken cancellationToken)
     {
-        var contact = await GetByIdAsync(request.id, cancellationToken);
+        var contact = await GetByIdAsync(request.Id, cancellationToken);
 
         if (contact is null)
         {
-            throw new ValidationException($"Contact with id {request.id} not found.");
+            throw new ValidationException($"Contact with id {request.Id} not found.");
         }
 
         var validator = new ContactPutRequestValidator();
