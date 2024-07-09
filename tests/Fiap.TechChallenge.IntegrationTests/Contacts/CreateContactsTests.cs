@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Fiap.TechChallenge.IntegrationTests.Contacts;
 
 [Collection("contactsTests")]
-public class CreateContactsTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
+public class CreateContactsTests(CustomWebApplicationFactory factory)
 {
     private readonly Fixture _fixture = new ();
     [Fact]

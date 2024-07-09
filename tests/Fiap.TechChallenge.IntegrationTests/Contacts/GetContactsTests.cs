@@ -7,7 +7,7 @@ using FluentAssertions;
 namespace Fiap.TechChallenge.IntegrationTests.Contacts;
 
 [Collection("contactsTests")]
-public class GetContactsTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
+public class GetContactsTests(CustomWebApplicationFactory factory)
 {
     private readonly ContactHelper _contactHelper = new();
     

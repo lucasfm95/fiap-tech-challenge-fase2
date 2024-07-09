@@ -1,7 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
-using AutoFixture;
-using Fiap.TechChallenge.Domain.Request;
 using Fiap.TechChallenge.Infrastructure.Context;
 using Fiap.TechChallenge.IntegrationTests.Helpers;
 using FluentAssertions;
@@ -10,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Fiap.TechChallenge.IntegrationTests.Contacts;
 
 [Collection("contactsTests")]
-public class DeleteContactsTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
+public class DeleteContactsTests(CustomWebApplicationFactory factory)
 {
     private readonly ContactHelper _contactHelper = new();
     
