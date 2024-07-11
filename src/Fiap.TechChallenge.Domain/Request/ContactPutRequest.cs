@@ -6,7 +6,7 @@ namespace Fiap.TechChallenge.Domain.Request;
 public class ContactPutRequest(long id, short ddd, string email, string phoneNumber, string name)
 {
     [JsonIgnore]
-    public long id { get; set; } = id;
+    public long Id { get; set; } = id;
     public short Ddd { get; init; } = ddd;
     public string Email { get; init; } = email;
     public string PhoneNumber { get; init; } = phoneNumber;

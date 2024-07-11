@@ -9,7 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Fiap.TechChallenge.IntegrationTests.Contacts;
 
-public class CreateContactsTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
+[Collection("contactsTests")]
+public class CreateContactsTests(CustomWebApplicationFactory factory)
 {
     private readonly Fixture _fixture = new ();
     [Fact]
@@ -22,6 +23,7 @@ public class CreateContactsTests(CustomWebApplicationFactory factory) : IClassFi
             .With(x=>x.PhoneNumber, "999999999")
             .With(x=>x.Email, "integration@test.com")
             .Create();
+        
         var client = factory.CreateClient();
 
         // Act
