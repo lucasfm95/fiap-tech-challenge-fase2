@@ -54,7 +54,7 @@ public class ContactController(IContactService contactService, ILogger<ContactCo
     /// <response code="200">OK</response>
     /// <response code="204">No content</response>
     /// <response code="500">Internal server error</response>
-    [HttpGet("/ddd/{dddNumber}")]
+    [HttpGet("ddd/{dddNumber}")]
     public async Task<IActionResult> GetByDdd([FromRoute]short dddNumber, CancellationToken cancellationToken)
     {
         var result = await contactService.GetAllByDddAsync(dddNumber, cancellationToken);
@@ -113,7 +113,7 @@ public class ContactController(IContactService contactService, ILogger<ContactCo
     [HttpPut("{id:long}")]
     public async Task<IActionResult> Update([FromRoute] long id, ContactPutRequest request, CancellationToken cancellationToken)
     {
-        request.id = id;
+        request.Id = id;
         var result = await contactService.UpdateAsync(request, cancellationToken);
         var response = new ContactPostResponse(result.DddNumber, result.Email,  result.PhoneNumber, result.Name);
         return Ok(new DefaultResponse<ContactPostResponse> { Message = "Contact updated successfully.", Data = response});

@@ -50,14 +50,14 @@ public class ContactServiceTests
             .With(c => c.PhoneNumber, "123456789")
             .With(c => c.Name, "Teste")
             .With(c => c.Ddd, 11)
-            .With(c => c.id, 1)
+            .With(c => c.Id, 1)
             .Create();
         
         var contactRepository = new Mock<IContactRepository>();
         
-        var contact = new Contact("teste 2", "teste@email.com", "123456788", 12){Id = contactPutRequest.id};
+        var contact = new Contact("teste 2", "teste@email.com", "123456788", 12){Id = contactPutRequest.Id};
         
-        contactRepository.Setup(x => x.FindByIdAsync(contactPutRequest.id, It.IsAny<CancellationToken>()))
+        contactRepository.Setup(x => x.FindByIdAsync(contactPutRequest.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(contact);
         
         contactRepository.Setup(x => x.UpdateAsync(It.IsAny<Contact>(), It.IsAny<CancellationToken>()))

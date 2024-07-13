@@ -14,14 +14,36 @@ public class CustomWebApplicationFactory
         .WithDatabase("contactsCrud")
         .WithPassword("123456")
         .Build();
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        Environment.SetEnvironmentVariable("RUN_MIGRATIONS", "true", EnvironmentVariableTarget.Process);
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "IntegrationTests", EnvironmentVariableTarget.Process);
+        builder.ConfigureServices(services => 
+        {
+            var connectionString = $"{_postgreSqlContainer.GetConnectionString()};Include Error Detail=true;";
+            
+            var descriptor = services.SingleOrDefault(
+                d => d.ServiceType ==
+                     typeof(DbContextOptions<ContactDbContext>));
+
+            if (descriptor is not null)
+            {
+                services.Remove(descriptor);
+            }
+            
+            services.AddDbContext<ContactDbContext>(options =>
+            {
+                options.UseNpgsql(connectionString);
+            });
+            
+            services.AddHealthChecks()
+                .AddNpgSql(connectionString);
+        });
+    }
 
     public async Task InitializeAsync()
     {
         await _postgreSqlContainer.StartAsync();
-        var connectionString = _postgreSqlContainer.GetConnectionString();
-        connectionString.Concat(";Include Error Detail=true;");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_DB_POSTGRES", connectionString, EnvironmentVariableTarget.Process);
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "IntegrationTests", EnvironmentVariableTarget.Process);
     }
 
     public new Task DisposeAsync()

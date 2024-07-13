@@ -193,7 +193,7 @@ public class ContactControllerTests
         var cancellationToken = new CancellationToken();
         var contactPutRequest = _fixture
             .Build<ContactPutRequest>()
-            .With(c=>c.id, 1)
+            .With(c=>c.Id, 1)
             .Create();
         
         var contact = _fixture.Build<Contact>()
@@ -201,7 +201,7 @@ public class ContactControllerTests
             .With(c => c.DddNumber, contactPutRequest.Ddd)
             .With(c => c.PhoneNumber, contactPutRequest.PhoneNumber)
             .With(c=>c.Email, contactPutRequest.Email)
-            .With(c=>c.Id, contactPutRequest.id)
+            .With(c=>c.Id, contactPutRequest.Id)
             .Create();
 
         var contactPutResponse = new ContactPutResponse(contact.DddNumber, contact.Email,  contact.PhoneNumber, contact.Name);
@@ -212,7 +212,7 @@ public class ContactControllerTests
 
         var controller = new ContactController(mockContactService.Object, It.IsAny<ILogger<ContactController>>());
 
-        var result = await controller.Update(contactPutRequest.id, contactPutRequest, cancellationToken);
+        var result = await controller.Update(contactPutRequest.Id, contactPutRequest, cancellationToken);
         
         mockContactService.Verify(contactService => contactService.UpdateAsync(contactPutRequest, It.IsAny<CancellationToken>()), Times.Once);
         var okObjectResult = result as OkObjectResult;

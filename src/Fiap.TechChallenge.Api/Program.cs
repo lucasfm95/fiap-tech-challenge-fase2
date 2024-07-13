@@ -7,6 +7,15 @@ using Prometheus;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+if (env != "IntegrationTests")
+{
+    builder.Services.AddHealthChecks()
+        .AddNpgSql(Environment.GetEnvironmentVariable("CONNECTION_STRING_DB_POSTGRES") ?? 
+                   throw new Exception("CONNECTION_STRING_DB_POSTGRES not found."));
+}
+
 builder.Services.AddDbContext<ContactDbContext>(options =>
 {
     options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING_DB_POSTGRES"));
@@ -19,9 +28,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureSwagger();
-builder.Services.AddHealthChecks()
-    .AddNpgSql(Environment.GetEnvironmentVariable("CONNECTION_STRING_DB_POSTGRES") ?? 
-               throw new Exception("CONNECTION_STRING_DB_POSTGRES not found."));
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 var counter = Metrics.CreateCounter(
@@ -30,10 +36,8 @@ var counter = Metrics.CreateCounter(
     LabelNames = ["method", "endpoint"]
 });
 
-
-
 var app = builder.Build();
-var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
@@ -42,7 +46,6 @@ app.MapControllers();
 app.UseHealthcheck();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseSerilogRequestLogging();
-
 app.Use((context, next) =>
 {
     counter.WithLabels(context.Request.Method, context.Request.Path).Inc();
@@ -53,7 +56,11 @@ app.UseHttpMetrics();
 
 if (env == "IntegrationTests")
 {
-    await RunMigration();
+    bool.TryParse(Environment.GetEnvironmentVariable("RUN_MIGRATIONS"), out var runMigrations);
+    if (runMigrations)
+    {
+        await RunMigration();
+    }   
 }
 
 app.Run();
@@ -67,5 +74,4 @@ async Task RunMigration()
 }
 public partial class Program
 {
-
 }
