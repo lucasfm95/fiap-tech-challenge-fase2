@@ -60,6 +60,7 @@ services:
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
+    restart: always
     ports:
       - 5432:5432
     networks:
